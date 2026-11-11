@@ -292,3 +292,31 @@ def test_telugu_and_hinglish_queries_match_english_behavior(client):
     assert te_inv["status"] == "completed"
     assert te_inv["operation"] == "inventory.read"
     assert te_inv["data"]["total_count"] > 0
+
+
+def test_demo_role_switcher_all_7_accounts(client):
+    expected_profiles = [
+        ("admin.a@metrogeneral.org", "Metro General Hospital", "Admin", 8, True, True),
+        ("billing.a@metrogeneral.org", "Metro General Hospital", "Billing Manager", 3, False, True),
+        ("pharmacist.a@metrogeneral.org", "Metro General Hospital", "Pharmacist", 2, True, False),
+        ("ravi.a@metrogeneral.org", "Metro General Hospital", "Pharmacist", 2, True, False),
+        ("frontdesk.a@metrogeneral.org", "Metro General Hospital", "Front Desk", 1, False, True),
+        ("doctor.a@metrogeneral.org", "Metro General Hospital", "Doctor", 1, True, False),
+        ("admin.b@citycare.org", "City Care Medical Center", "Admin", 8, True, True),
+    ]
+
+    for email, hosp_name, role_name, expected_allowed, can_inv, can_bills in expected_profiles:
+        session = login_as(client, email)
+        headers = {"Authorization": session["Authorization"]}
+        assert session["user"]["hospital_name"] == hosp_name
+        assert role_name in session["user"]["roles"]
+
+        perms = client.get("/api/permissions/me", headers=headers).json()["permissions"]
+        allowed_count = sum(1 for p in perms.values() if p["allowed"])
+        assert allowed_count == expected_allowed
+
+        inv_resp = client.get("/api/inventory", headers=headers, params={"filter": "summary"})
+        assert inv_resp.status_code == (200 if can_inv else 403)
+
+        bills_resp = client.get("/api/bills", headers=headers, params={"filter": "summary"})
+        assert bills_resp.status_code == (200 if can_bills else 403)

@@ -55,8 +55,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     const session = await api.login(email, password);
     localStorage.setItem(TOKEN_STORAGE_KEY, session.access_token);
-    setUser(session.user);
     const perms = await api.getMyPermissions();
+    setUser(session.user);
     setPermissions(perms);
   };
 

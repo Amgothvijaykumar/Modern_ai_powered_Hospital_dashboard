@@ -18,6 +18,7 @@ const DEMO_ROLES = [
 export function DashboardPage() {
   const { user, permissions, hasPermission, login } = useAuth();
   const [switchingEmail, setSwitchingEmail] = useState<string | null>(null);
+  const [switchError, setSwitchError] = useState<string | null>(null);
   const demoLoginEnabled = import.meta.env.VITE_ENABLE_DEMO_LOGIN !== "false";
   const [invStats, setInvStats] = useState<{
     total_items: number;
@@ -55,8 +56,11 @@ export function DashboardPage() {
   const handleRoleSwitch = async (email: string) => {
     if (switchingEmail || user?.email === email) return;
     setSwitchingEmail(email);
+    setSwitchError(null);
     try {
       await login(email, "HospitalDemo!2026");
+    } catch (err: any) {
+      setSwitchError(err?.response?.data?.detail || "Unable to switch demo role right now.");
     } finally {
       setSwitchingEmail(null);
     }
@@ -134,6 +138,11 @@ export function DashboardPage() {
               );
             })}
           </div>
+          {switchError && (
+            <div className="mt-2.5 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-medium text-rose-700">
+              {switchError}
+            </div>
+          )}
         </div>
       )}
 
@@ -203,7 +212,7 @@ export function DashboardPage() {
       {/* Main Bento Workspace: Chat Console (8 cols) + Effective Permissions Matrix (4 cols) */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         <div className="lg:col-span-8">
-          <ChatPanel onDataChanged={loadMetrics} />
+          <ChatPanel key={user?.id} onDataChanged={loadMetrics} />
         </div>
 
         <div className="flex flex-col rounded-3xl border border-slate-200/90 bg-white shadow-sm lg:col-span-4">
