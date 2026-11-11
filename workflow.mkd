@@ -1,0 +1,92 @@
+# Hospital Operations AI Agent — Phased Execution Workflow
+
+This workflow tracks the 10-phase implementation of the **Permission-Aware Hospital Operations AI Agent**. Each phase must be implemented, verified, and tested before moving to the next.
+
+---
+
+## Status Tracker
+
+- [x] **Phase 1**: Architecture, repository setup, database schema, Alembic migrations, RLS policies, and deterministic seed data
+- [x] **Phase 2**: Supabase authentication, trusted user/hospital resolution, and tenant isolation
+- [ ] **Phase 3**: RBAC, user permission overrides, constraints, and access-management safeguards
+- [ ] **Phase 4**: Operation registry, typed schemas, repository layer, and Python business logic
+- [x] **Phase 5**: Gemini API (`google-genai`) integration, structured intent extraction, prompt templates, few-shot examples, and clarification/rejection handling
+- [x] **Phase 6**: Dry-run preview, server-side confirmation tokens (>50-row exact count), revalidation, and atomic execution
+- [x] **Phase 7**: Comprehensive immutable audit logging and API restrictions
+- [x] **Phase 8**: React + TypeScript + Vite + Tailwind + shadcn-style dashboard, AI chat, preview/confirmation UI, and admin views
+- [x] **Phase 9**: Automated acceptance tests for all 12 required scenarios + unit, integration, and security test suites
+- [x] **Phase 10**: 100-case extensible catalog & evaluation script, architecture/security/design-note docs, demo script, and Docker Compose verification
+
+---
+
+## Phase Details
+
+### Phase 1: Architecture, Repository Setup & Database Schema
+- Create modular directory structure (`backend/`, `frontend/`, `prompts/`, `evaluation/`, `docs/`, `docker-compose.yml`, `.env.example`, `README.md`).
+- Configure Python virtual environment and backend dependencies (`fastapi`, `pydantic>=2`, `sqlalchemy>=2`, `alembic`, `psycopg[binary]`, `pytest`, `httpx`, `google-genai`, `pyjwt`).
+- Implement SQLAlchemy 2.x models with UUID primary keys, foreign keys, check constraints, and indexes:
+  - `hospitals`, `users`, `roles`, `permissions`, `role_permissions`, `user_roles`, `user_permission_overrides`, `inventory_items`, `bills`, `audit_log`.
+- Create Alembic migration `001_initial_schema.py` and SQL RLS migration `002_rls_policies.py`.
+- Implement deterministic seed module (`backend/seed/seed_data.py`):
+  - 2 hospitals (`Metro General Hospital`, `City Care Medical Center`),
+  - >= 6 users per hospital covering all 5 roles (`Admin`, `Billing Manager`, `Pharmacist`, `Front Desk`, `Doctor`), including `Ravi` for Scenario 6/7,
+  - >= 600 inventory items per hospital (with low-stock, expiring-within-30-days, and Scenario 12 prompt-injection item),
+  - >= 500 bills per hospital spanning the last 90 days (including last month in `Asia/Kolkata` and Front Desk owned bills).
+- Verify migrations/schema creation and seed counts via automated tests.
+
+### Phase 2: Supabase Authentication, User Identity & Tenant Isolation
+- Implement JWT verification for Supabase Auth tokens (plus documented local dev/test auth verification mode using HS256/JWKS without trusting client-supplied `user_id`/`hospital_id`/`role`).
+- Implement FastAPI dependency `get_current_user_context` resolving `User`, `Hospital`, `is_active`, and roles strictly from server-side DB via `auth_user_id`.
+- Implement tenant-scoped base repository and PostgreSQL RLS session context setter (`SET LOCAL app.current_hospital_id`, `SET LOCAL app.current_user_id`).
+- Add `POST /api/auth/session` and `GET /api/permissions/me`.
+- Test identity resolution, inactive user rejection, spoofed header/body `hospital_id` rejection, and cross-tenant isolation.
+
+### Phase 3: RBAC & Permission Engine
+- Implement effective permission resolver combining `user_roles` -> `role_permissions` (with `constraints` JSONB) and `user_permission_overrides` (`DENY` overrides `ALLOW` and role grants).
+- Enforce safeguards:
+  - Admin cannot grant permissions they do not possess.
+  - Admin cannot remove their own Admin role.
+  - Non-admin (e.g., Billing Manager) cannot promote themselves to Admin.
+  - Constraint enforcement (`max_rows: 500`, `max_discount_pct: 10` vs `100`, `scope: own_only`).
+- Test all permission matrix combinations and privilege-escalation protections.
+
+### Phase 4: Operation Registry & Python Business Logic
+- Define typed Pydantic v2 input/output schemas for all supported operations (`inventory.read`, `inventory.update`, `inventory.delete`, `bills.read`, `bills.discount`, `bills.update_status`, `users.read`, `users.manage_access`, plus reporting/analytics operations).
+- Build centralized `OPERATION_REGISTRY` mapping approved operation keys to typed handlers.
+- Implement `Decimal` (`ROUND_HALF_UP`) discount calculations and `Asia/Kolkata` half-open date boundary resolver.
+- Implement FastAPI read endpoints (`GET /api/inventory`, `GET /api/bills`, `GET /api/users`).
+- Unit test schemas, calculations, date boundaries, and registry dispatch.
+
+### Phase 5: OpenAI Integration & Structured Intent Extraction
+- Create `prompts/system_prompt.txt` and `prompts/examples/few_shot_examples.json`.
+- Implement OpenAI Responses/Chat Completions structured-output intent extractor (`IntentExtractionResult`) with strict Pydantic validation and fallback-safe error handling.
+- Reject arbitrary SQL, unknown operations, and unexpected parameters; trigger clarification for ambiguous requests (e.g., "Give Ravi access").
+- Ensure untrusted DB content (e.g., Scenario 12 malicious item name) is isolated from instructions.
+- Test intent extraction, clarification, unsupported-intent rejection, and prompt-injection safety.
+
+### Phase 6: Preview, Confirmation & Safe Execution
+- Implement `operation_confirmations` persistence and HMAC/opaque server-side confirmation token bound to `user_id`, `hospital_id`, `operation`, `params_hash`, `record_snapshot_hash`, `expected_row_count`, and `expires_at`.
+- Implement dry-run preview service (affected count, up to 5 before/after samples, financial impact, resolved date ranges).
+- Enforce exact row-count typing when `affected_rows > 50`.
+- Implement `POST /api/agent/chat`, `POST /api/operations/preview`, `POST /api/operations/confirm`, `POST /api/operations/cancel`.
+- Revalidate permissions, constraints, and `version` optimistic locks inside an atomic DB transaction on confirm; invalidate stale previews.
+
+### Phase 7: Audit Logging
+- Implement `AuditService` logging every attempt: success, denied, cancelled, invalid, unsupported, clarification_required, failed.
+- Ensure sensitive secrets/tokens are never logged and audit rows cannot be updated or deleted via API.
+- Implement `GET /api/audit-logs` (Admin-only, hospital-scoped).
+- Test audit persistence across all outcome types and immutability enforcement.
+
+### Phase 8: React Dashboard & Chat Interface
+- Scaffold React + TypeScript + Vite + Tailwind CSS + shadcn-style UI components in `frontend/`.
+- Implement Login (Supabase Auth + local demo auth integration), Protected Routes, Dashboard summary cards, AI Chat workspace, Write Preview & Confirmation modal/panel (with >50 exact row-count input), and Admin tabs (Users, Roles/Permissions, Inventory, Bills, Audit Logs).
+- Verify TypeScript compilation and Vite production build (`npm run build`).
+
+### Phase 9: 12 Acceptance Scenarios & Security Verification
+- Implement dedicated automated acceptance test suite covering Scenarios 1–12, verifying both HTTP responses and exact DB side effects / non-effects.
+- Run full unit, integration, security, and acceptance suites and fix any issues.
+
+### Phase 10: 100-Case Evaluation, Documentation & Docker Setup
+- Create 100+ business-case catalog and evaluation dataset (`evaluation/dataset/cases.json`) and evaluation runner (`evaluation/evaluate.py`).
+- Finalize `docs/architecture.md`, `docs/security.md`, `docs/design_note.md` (3 realistic risks + mitigations), `docs/demo_script.md` (5–7 min walkthrough), `README.md`, `docker-compose.yml`, and `.env.example`.
+- Perform end-to-end verification of tests, frontend build, evaluation script, and Docker configs.

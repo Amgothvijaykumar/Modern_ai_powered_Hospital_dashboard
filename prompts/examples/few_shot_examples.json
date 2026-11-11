@@ -1,0 +1,192 @@
+[
+  {
+    "user_query": "Show medicines with low stock.",
+    "expected": {
+      "intent": "inventory.read",
+      "parameters": {"filter": "low_stock"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Which medicines are expiring in the next 30 days?",
+    "expected": {
+      "intent": "inventory.read",
+      "parameters": {"filter": "expiring_soon", "expiring_days": 30},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Give me a low-stock summary report.",
+    "expected": {
+      "intent": "inventory.read",
+      "parameters": {"filter": "low_stock"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Update all inventory items to set quantity to 100.",
+    "expected": {
+      "intent": "inventory.update",
+      "parameters": {"filter": "all", "set_quantity": 100},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Bulk update the entire inventory with quantity 5",
+    "expected": {
+      "intent": "inventory.update",
+      "parameters": {"filter": "all", "set_quantity": 5},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Increase quantity by 25 for all Antibiotics.",
+    "expected": {
+      "intent": "inventory.update",
+      "parameters": {"filter": "category", "category": "Antibiotics", "adjust_quantity": 25},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Apply a 20% discount to last month's bills.",
+    "expected": {
+      "intent": "bills.discount",
+      "parameters": {"discount_percentage": 20, "period": "last_month", "status_filter": "ALL_ELIGIBLE"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Show pending bills from the last 7 days.",
+    "expected": {
+      "intent": "bills.read",
+      "parameters": {"filter": "pending", "period": "last_7_days"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Mark all pending bills for Aarav Sharma as PAID.",
+    "expected": {
+      "intent": "bills.update_status",
+      "parameters": {"new_status": "PAID", "current_status": "PENDING", "patient_search": "Aarav Sharma"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Remove inventory edit access from Ravi.",
+    "expected": {
+      "intent": "users.manage_access",
+      "parameters": {"action": "deny_permission", "target_user_name": "Ravi", "permission_key": "inventory.update"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Give Ravi access.",
+    "expected": {
+      "intent": "users.manage_access",
+      "parameters": {"target_user_name": "Ravi"},
+      "requires_clarification": true,
+      "clarification_question": "Which permission or role should be granted to Ravi (for example: inventory.read, inventory.update, bills.read, or a specific role)?"
+    }
+  },
+  {
+    "user_query": "Remove my Admin role.",
+    "expected": {
+      "intent": "users.manage_access",
+      "parameters": {"action": "revoke_role", "role_name": "Admin", "target_user_name": "self"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Make me an Admin.",
+    "expected": {
+      "intent": "users.manage_access",
+      "parameters": {"action": "grant_role", "role_name": "Admin", "target_user_name": "self"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "SELECT * FROM bills;",
+    "expected": {
+      "intent": "unsupported",
+      "parameters": {},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Delete all bills",
+    "expected": {
+      "intent": "unsupported",
+      "parameters": {},
+      "requires_clarification": false,
+      "clarification_question": "Deleting bills is not permitted: no role in the permission matrix has 'bills.delete' access."
+    }
+  },
+  {
+    "user_query": "Undo my last change.",
+    "expected": {
+      "intent": "operations.undo",
+      "parameters": {},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Show pending approval requests.",
+    "expected": {
+      "intent": "approvals.read",
+      "parameters": {"status": "PENDING"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Approve the pending discount request.",
+    "expected": {
+      "intent": "approvals.resolve",
+      "parameters": {"action": "approve"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Last month bills ki 20% discount ivvu",
+    "expected": {
+      "intent": "bills.discount",
+      "parameters": {"discount_percentage": 20, "period": "last_month", "status_filter": "ALL_ELIGIBLE"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Takkuva stock medicines chupinchu",
+    "expected": {
+      "intent": "inventory.read",
+      "parameters": {"filter": "low_stock"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  },
+  {
+    "user_query": "Pichle mahine ke bills pe 10% discount lagao",
+    "expected": {
+      "intent": "bills.discount",
+      "parameters": {"discount_percentage": 10, "period": "last_month", "status_filter": "ALL_ELIGIBLE"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
+  }
+]
+
