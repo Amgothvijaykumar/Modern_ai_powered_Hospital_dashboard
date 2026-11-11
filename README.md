@@ -6,6 +6,12 @@ Staff can query inventory, review INR billing, apply date-scoped discounts, mana
 
 ---
 
+## System & LLM Architecture
+
+![Permission-Aware LLM Operations Architecture](hosArchitecture.png)
+
+---
+
 ## Key Capabilities & Safety Architecture
 
 ### Core Security & Guardrails
