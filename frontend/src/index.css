@@ -3,23 +3,22 @@
 @tailwind utilities;
 
 :root {
-  --background: 48 18% 95%;
-  --foreground: 0 0% 4%;
+  --background: 216 25% 96%;
+  --foreground: 222 47% 11%;
   --card: 0 0% 100%;
-  --card-foreground: 0 0% 4%;
-  --primary: 2 100% 44%;
+  --card-foreground: 222 47% 11%;
+  --primary: 243 75% 59%;
   --primary-foreground: 0 0% 100%;
-  --muted: 40 12% 91%;
-  --muted-foreground: 0 0% 38%;
-  --border: 0 0% 15%;
+  --muted: 214 20% 93%;
+  --muted-foreground: 215 16% 47%;
+  --border: 214 22% 88%;
 }
 
 @layer base {
   body {
-    font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background-color: #f4f3ef;
-    color: #0a0a0a;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-family: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+    background-color: #f3f5f8;
+    color: #0f172a;
   }
 
   code,

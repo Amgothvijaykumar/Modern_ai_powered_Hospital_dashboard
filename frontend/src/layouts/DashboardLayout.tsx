@@ -32,135 +32,135 @@ export function DashboardLayout() {
   ].filter((item) => item.visible);
 
   return (
-    <div className="flex min-h-screen bg-[#F4F3EF] text-[#0A0A0A]">
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-[#0A0A0A] bg-white md:flex">
-        <div className="flex items-center gap-3 border-b border-[#0A0A0A] px-5 py-4">
-          <div className="relative flex h-9 w-9 shrink-0 items-center justify-center bg-[#E10600] text-white">
-            <span className="absolute h-4 w-1.5 bg-white" />
-            <span className="absolute h-1.5 w-4 bg-white" />
-          </div>
+    <div className="min-h-screen bg-[#F3F5F8] p-3 text-slate-950 sm:p-4 lg:p-5">
+      <div className="mx-auto flex max-w-[1520px] flex-col gap-4 md:flex-row">
+        {/* Bento Sidebar Rail */}
+        <aside className="hidden w-64 shrink-0 flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-4 shadow-sm md:sticky md:top-5 md:flex md:h-[calc(100vh-2.5rem)]">
           <div>
-            <div className="text-xs font-extrabold uppercase tracking-[0.1em] text-[#0A0A0A]">
-              Hospital Ops
+            <div className="flex items-center gap-3 rounded-2xl bg-slate-950 px-3.5 py-3 text-white">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white">
+                <Activity className="h-4 w-4" />
+              </div>
+              <div>
+                <div className="text-xs font-extrabold tracking-tight">MEDOPS AI</div>
+                <div className="font-mono text-[10px] text-slate-400">Hospital Control</div>
+              </div>
             </div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-neutral-500">
-              AI Control // RBAC
+
+            <div className="mt-5 px-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+              Workspace Modules
             </div>
+
+            <nav className="mt-2 space-y-1.5">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const active = location.pathname === item.to;
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className={`flex items-center justify-between rounded-2xl px-3.5 py-2.5 text-xs font-semibold transition-all ${
+                      active
+                        ? "bg-slate-950 text-white shadow-sm"
+                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
+                    }`}
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <Icon className={`h-4 w-4 ${active ? "text-indigo-400" : "text-slate-400"}`} />
+                      {item.label}
+                    </span>
+                    <span
+                      className={`font-mono text-[10px] ${
+                        active ? "text-slate-400" : "text-slate-400"
+                      }`}
+                    >
+                      {item.index}
+                    </span>
+                  </Link>
+                );
+              })}
+            </nav>
           </div>
-        </div>
 
-        <div className="border-b border-neutral-300 bg-[#F4F3EF]/70 px-5 py-2 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-neutral-600">
-          Navigation Index
-        </div>
-
-        <nav className="flex-1 divide-y divide-neutral-200 border-b border-neutral-200">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const active = location.pathname === item.to;
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`group flex items-center justify-between border-l-4 px-4 py-3 text-xs font-semibold uppercase tracking-[0.06em] transition ${
-                  active
-                    ? "border-l-[#E10600] bg-[#0A0A0A] text-white"
-                    : "border-l-transparent bg-white text-neutral-700 hover:bg-[#F4F3EF] hover:text-[#0A0A0A]"
-                }`}
-              >
-                <span className="flex items-center gap-2.5">
-                  <Icon className={`h-3.5 w-3.5 ${active ? "text-[#E10600]" : "text-neutral-500"}`} />
-                  {item.label}
-                </span>
-                <span
-                  className={`font-mono text-[10px] ${
-                    active ? "text-neutral-300" : "text-neutral-400"
-                  }`}
-                >
-                  {item.index}
-                </span>
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="border-t border-[#0A0A0A] bg-[#F4F3EF]/60 p-4">
-          <div className="border border-[#0A0A0A] bg-white p-3 text-xs">
-            <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-neutral-500">
-              Active Operator
+          <div className="space-y-3">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-3.5 text-xs">
+              <div className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                Active Operator
+              </div>
+              <div className="mt-1 font-bold text-slate-950">{user?.full_name}</div>
+              <div className="truncate font-mono text-[11px] text-slate-500">{user?.email}</div>
+              <div className="mt-2.5 flex flex-wrap gap-1">
+                {user?.roles.map((r) => (
+                  <Badge key={r} variant="info">
+                    {r}
+                  </Badge>
+                ))}
+              </div>
             </div>
-            <div className="mt-1 font-bold text-[#0A0A0A]">{user?.full_name}</div>
-            <div className="truncate font-mono text-[11px] text-neutral-600">{user?.email}</div>
-            <div className="mt-2.5 flex flex-wrap gap-1">
+            <Button variant="outline" size="sm" className="w-full justify-between" onClick={logout}>
+              <span>Sign Out</span>
+              <LogOut className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </aside>
+
+        {/* Main Content Column */}
+        <div className="flex min-w-0 flex-1 flex-col gap-4">
+          {/* Top Bento Header Bar */}
+          <header className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200/90 bg-white px-5 py-3 shadow-sm">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+                <Building2 className="h-4 w-4" />
+              </div>
+              <div>
+                <div className="text-sm font-bold tracking-tight text-slate-950">
+                  {user?.hospital_name}
+                </div>
+                <div className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                  Multi-Tenant RBAC · Asia/Kolkata (IST)
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5">
+              <span className="hidden text-xs font-medium text-slate-600 sm:inline">
+                {user?.full_name}
+              </span>
               {user?.roles.map((r) => (
                 <Badge key={r} variant="info">
                   {r}
                 </Badge>
               ))}
+              <Button variant="outline" size="sm" className="md:hidden" onClick={logout}>
+                <LogOut className="h-3.5 w-3.5" />
+              </Button>
             </div>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="mt-3 w-full justify-between"
-            onClick={logout}
-          >
-            <span>Sign Out</span>
-            <LogOut className="h-3.5 w-3.5" />
-          </Button>
+          </header>
+
+          {/* Mobile Bento Navigation Strip */}
+          <nav className="flex gap-2 overflow-x-auto pb-1 md:hidden">
+            {navItems.map((item) => {
+              const active = location.pathname === item.to;
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={`whitespace-nowrap rounded-xl border px-3.5 py-2 text-xs font-semibold transition ${
+                    active
+                      ? "border-slate-950 bg-slate-950 text-white"
+                      : "border-slate-200 bg-white text-slate-700"
+                  }`}
+                >
+                  {item.index} · {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <main className="min-w-0 flex-1">
+            <Outlet />
+          </main>
         </div>
-      </aside>
-
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex flex-wrap items-center justify-between gap-3 border-b border-[#0A0A0A] bg-white px-6 py-3">
-          <div className="flex items-center gap-3">
-            <div className="relative flex h-6 w-6 items-center justify-center bg-[#E10600] md:hidden">
-              <span className="absolute h-3 w-1 bg-white" />
-              <span className="absolute h-1 w-3 bg-white" />
-            </div>
-            <Building2 className="hidden h-4 w-4 text-[#E10600] md:block" />
-            <span className="text-xs font-extrabold uppercase tracking-[0.1em] text-[#0A0A0A]">
-              {user?.hospital_name}
-            </span>
-            <span className="hidden font-mono text-[10px] uppercase tracking-[0.1em] text-neutral-400 sm:inline">
-              // ASIA/KOLKATA (IST)
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2.5">
-            <span className="hidden font-mono text-[11px] text-neutral-600 sm:inline">
-              {user?.full_name}
-            </span>
-            {user?.roles.map((r) => (
-              <Badge key={r} variant="danger">
-                {r}
-              </Badge>
-            ))}
-            <Button variant="outline" size="sm" className="md:hidden" onClick={logout}>
-              <LogOut className="h-3.5 w-3.5" />
-            </Button>
-          </div>
-        </header>
-
-        <nav className="flex overflow-x-auto border-b border-[#0A0A0A] bg-white md:hidden">
-          {navItems.map((item) => {
-            const active = location.pathname === item.to;
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`whitespace-nowrap border-r border-neutral-300 px-3 py-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] ${
-                  active ? "bg-[#0A0A0A] text-white" : "text-neutral-700"
-                }`}
-              >
-                {item.index} {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <main className="mx-auto w-full max-w-[1440px] flex-1 p-5 sm:p-7">
-          <Outlet />
-        </main>
       </div>
     </div>
   );

@@ -53,18 +53,18 @@ export function UsersPage() {
   };
 
   return (
-    <div className="space-y-5">
-      <div className="border-b-2 border-[#0A0A0A] pb-4">
-        <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[#E10600]">
+    <div className="space-y-4">
+      <div className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm">
+        <div className="inline-flex rounded-full bg-indigo-50 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-indigo-700">
           04 // Identity &amp; Governance
         </div>
-        <h1 className="mt-1 text-2xl font-extrabold uppercase tracking-tight text-[#0A0A0A]">
+        <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">
           Hospital Users &amp; Access Control
         </h1>
       </div>
 
       {error && (
-        <div className="border border-[#E10600] border-l-4 bg-[#FFF2F2] px-4 py-2.5 text-sm font-medium text-[#E10600]">
+        <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
           {error}
         </div>
       )}
@@ -89,31 +89,31 @@ export function UsersPage() {
         </CardHeader>
         <CardContent className="p-0">
           {loading ? (
-            <div className="p-6 font-mono text-xs uppercase text-neutral-500">Loading users...</div>
+            <div className="p-6 font-mono text-xs text-slate-500">Loading users...</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="border-b border-[#0A0A0A] bg-[#F4F3EF] font-mono text-[10px] uppercase tracking-[0.1em] text-neutral-700">
+                <thead className="border-b border-slate-200 bg-slate-50 font-mono text-[10px] uppercase tracking-wider text-slate-500">
                   <tr>
-                    <th className="px-4 py-3">Staff Member</th>
-                    <th className="px-4 py-3">Roles</th>
-                    <th className="px-4 py-3">User Overrides</th>
-                    <th className="px-4 py-3">Quick Safeguarded Action</th>
+                    <th className="px-5 py-3">Staff Member</th>
+                    <th className="px-5 py-3">Roles</th>
+                    <th className="px-5 py-3">User Overrides</th>
+                    <th className="px-5 py-3">Quick Safeguarded Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-200">
+                <tbody className="divide-y divide-slate-100">
                   {users.map((u) => {
                     const hasInvDeny = u.overrides.some(
                       (o) => o.permission_key === "inventory.update" && o.effect === "DENY"
                     );
                     const canInvUpdate = u.effective_permissions?.["inventory.update"]?.allowed;
                     return (
-                      <tr key={u.id} className="hover:bg-[#F4F3EF]/60">
-                        <td className="px-4 py-3">
-                          <div className="font-bold text-[#0A0A0A]">{u.full_name}</div>
-                          <div className="font-mono text-[11px] text-neutral-500">{u.email}</div>
+                      <tr key={u.id} className="hover:bg-slate-50/70">
+                        <td className="px-5 py-3">
+                          <div className="font-bold text-slate-900">{u.full_name}</div>
+                          <div className="font-mono text-[11px] text-slate-500">{u.email}</div>
                         </td>
-                        <td className="px-4 py-3">
+                        <td className="px-5 py-3">
                           <div className="flex flex-wrap gap-1">
                             {u.roles.map((r) => (
                               <Badge key={r} variant="info">
@@ -122,9 +122,9 @@ export function UsersPage() {
                             ))}
                           </div>
                         </td>
-                        <td className="px-4 py-3">
+                        <td className="px-5 py-3">
                           {u.overrides.length === 0 ? (
-                            <span className="font-mono text-[11px] text-neutral-400">NONE</span>
+                            <span className="font-mono text-[11px] text-slate-400">None</span>
                           ) : (
                             <div className="flex flex-wrap gap-1">
                               {u.overrides.map((ov) => (
@@ -138,7 +138,7 @@ export function UsersPage() {
                             </div>
                           )}
                         </td>
-                        <td className="px-4 py-3">
+                        <td className="px-5 py-3">
                           {canInvUpdate && !u.roles.includes("Admin") && (
                             <Button
                               size="sm"

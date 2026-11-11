@@ -5,7 +5,7 @@ import {
   HelpCircle,
   Send,
   ShieldAlert,
-  Terminal,
+  Sparkles,
   User as UserIcon,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
@@ -43,7 +43,7 @@ export function ChatPanel({ onDataChanged }: { onDataChanged?: () => void }) {
       id: "welcome",
       role: "assistant",
       content:
-        "SYSTEM READY. Ask to inspect inventory, calculate INR billing discounts, manage staff permissions, review approvals, or undo your last change. Every write operation executes only after dry-run preview and confirmation.",
+        "Workspace Copilot ready. Ask to inspect inventory, calculate INR billing discounts, manage staff permissions, review approvals, or undo your last change. Every write operation requires a dry-run preview and explicit confirmation.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -106,9 +106,9 @@ export function ChatPanel({ onDataChanged }: { onDataChanged?: () => void }) {
 
     if (approvalReq) {
       return (
-        <div className="mt-2.5 flex flex-wrap items-center gap-2 border border-amber-700 border-l-4 bg-amber-50 px-3 py-2 text-xs text-amber-950">
+        <div className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-xs text-amber-950">
           <Badge variant="warning">Pending Approval #{String(approvalReq.short_id)}</Badge>
-          <span className="font-mono text-[11px]">
+          <span className="text-xs font-medium">
             Escalated to Hospital Admin for review in chat.
           </span>
         </div>
@@ -117,26 +117,26 @@ export function ChatPanel({ onDataChanged }: { onDataChanged?: () => void }) {
 
     if (approvals && approvals.length > 0) {
       return (
-        <div className="mt-3 divide-y divide-neutral-300 border border-[#0A0A0A] bg-white">
+        <div className="mt-3 divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
           {approvals.map((req) => (
             <div
               key={String(req.id)}
-              className="flex flex-wrap items-center justify-between gap-2 px-3 py-2.5 text-xs"
+              className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 text-xs"
             >
               <div>
                 <div className="flex flex-wrap items-center gap-1.5">
                   <Badge variant="info">#{String(req.short_id)}</Badge>
-                  <span className="font-bold text-[#0A0A0A]">
+                  <span className="font-bold text-slate-900">
                     {String(req.requester_name || "Staff")}
                   </span>
-                  <span className="font-mono text-[11px] text-neutral-500">
+                  <span className="font-mono text-[11px] text-slate-500">
                     ({String(req.operation)})
                   </span>
                   <Badge variant={req.status === "PENDING" ? "warning" : "outline"}>
                     {String(req.status)}
                   </Badge>
                 </div>
-                <div className="mt-1 text-neutral-700">{String(req.raw_user_query)}</div>
+                <div className="mt-1 text-slate-600">{String(req.raw_user_query)}</div>
               </div>
               {req.status === "PENDING" && isAdmin && (
                 <div className="flex gap-1.5">
@@ -165,39 +165,39 @@ export function ChatPanel({ onDataChanged }: { onDataChanged?: () => void }) {
 
     if (items && items.length > 0) {
       return (
-        <div className="mt-3 border border-[#0A0A0A] bg-white">
+        <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-white">
           <div className="max-h-72 overflow-x-auto overflow-y-auto">
             <table className="w-full text-left text-xs">
-              <thead className="sticky top-0 border-b border-[#0A0A0A] bg-[#F4F3EF] font-mono text-[10px] uppercase tracking-[0.1em] text-neutral-700">
+              <thead className="sticky top-0 border-b border-slate-200 bg-slate-50 font-mono text-[10px] uppercase tracking-wider text-slate-500">
                 <tr>
-                  <th className="px-3 py-2">Item Name</th>
-                  <th className="px-3 py-2">Category</th>
-                  <th className="px-3 py-2">Qty / Min</th>
-                  <th className="px-3 py-2">Expiry</th>
-                  <th className="px-3 py-2">Batch</th>
+                  <th className="px-3.5 py-2.5">Item Name</th>
+                  <th className="px-3.5 py-2.5">Category</th>
+                  <th className="px-3.5 py-2.5">Qty / Min</th>
+                  <th className="px-3.5 py-2.5">Expiry</th>
+                  <th className="px-3.5 py-2.5">Batch</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-200">
+              <tbody className="divide-y divide-slate-100">
                 {items.map((item) => (
-                  <tr key={item.id} className="hover:bg-[#F4F3EF]/60">
-                    <td className="px-3 py-2 font-semibold text-[#0A0A0A]">
+                  <tr key={item.id} className="hover:bg-slate-50/80">
+                    <td className="px-3.5 py-2 font-semibold text-slate-900">
                       {String(item.item_name)}
                     </td>
-                    <td className="px-3 py-2 text-neutral-600">{String(item.category)}</td>
-                    <td className="px-3 py-2 font-mono tabular-nums">
+                    <td className="px-3.5 py-2 text-slate-600">{String(item.category)}</td>
+                    <td className="px-3.5 py-2 font-mono tabular-nums">
                       <span
                         className={
-                          item.is_low_stock ? "font-bold text-[#E10600]" : "text-[#0A0A0A]"
+                          item.is_low_stock ? "font-bold text-rose-600" : "text-slate-900"
                         }
                       >
                         {item.quantity}
                       </span>{" "}
                       / {item.minimum_quantity}
                     </td>
-                    <td className="px-3 py-2 font-mono text-[11px] tabular-nums text-neutral-600">
+                    <td className="px-3.5 py-2 font-mono text-[11px] tabular-nums text-slate-600">
                       {String(item.expiry_date)}
                     </td>
-                    <td className="px-3 py-2 font-mono text-[11px] text-neutral-500">
+                    <td className="px-3.5 py-2 font-mono text-[11px] text-slate-500">
                       {String(item.batch_number)}
                     </td>
                   </tr>
@@ -206,7 +206,7 @@ export function ChatPanel({ onDataChanged }: { onDataChanged?: () => void }) {
             </table>
           </div>
           {(data.total_count as number) > items.length && (
-            <div className="border-t border-[#0A0A0A] bg-[#F4F3EF] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-neutral-600">
+            <div className="border-t border-slate-100 bg-slate-50 px-3.5 py-2 font-mono text-[10px] uppercase tracking-wider text-slate-500">
               Showing {items.length} of {data.total_count as number} matching records.
             </div>
           )}
@@ -216,31 +216,31 @@ export function ChatPanel({ onDataChanged }: { onDataChanged?: () => void }) {
 
     if (bills && bills.length > 0) {
       return (
-        <div className="mt-3 overflow-x-auto border border-[#0A0A0A] bg-white">
+        <div className="mt-3 overflow-x-auto overflow-hidden rounded-2xl border border-slate-200 bg-white">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-[#0A0A0A] bg-[#F4F3EF] font-mono text-[10px] uppercase tracking-[0.1em] text-neutral-700">
+            <thead className="border-b border-slate-200 bg-slate-50 font-mono text-[10px] uppercase tracking-wider text-slate-500">
               <tr>
-                <th className="px-3 py-2">Patient</th>
-                <th className="px-3 py-2">Gross</th>
-                <th className="px-3 py-2">Discount</th>
-                <th className="px-3 py-2">Net</th>
-                <th className="px-3 py-2">Status</th>
+                <th className="px-3.5 py-2.5">Patient</th>
+                <th className="px-3.5 py-2.5">Gross</th>
+                <th className="px-3.5 py-2.5">Discount</th>
+                <th className="px-3.5 py-2.5">Net</th>
+                <th className="px-3.5 py-2.5">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-200">
+            <tbody className="divide-y divide-slate-100">
               {bills.slice(0, 10).map((b) => (
-                <tr key={b.id} className="hover:bg-[#F4F3EF]/60">
-                  <td className="px-3 py-2 font-semibold text-[#0A0A0A]">
+                <tr key={b.id} className="hover:bg-slate-50/80">
+                  <td className="px-3.5 py-2 font-semibold text-slate-900">
                     {String(b.patient_name)}
                   </td>
-                  <td className="px-3 py-2 font-mono tabular-nums">₹{String(b.gross_amount)}</td>
-                  <td className="px-3 py-2 font-mono tabular-nums text-[#E10600]">
+                  <td className="px-3.5 py-2 font-mono tabular-nums">₹{String(b.gross_amount)}</td>
+                  <td className="px-3.5 py-2 font-mono tabular-nums text-rose-600">
                     ₹{String(b.discount_amount)}
                   </td>
-                  <td className="px-3 py-2 font-mono font-bold tabular-nums">
+                  <td className="px-3.5 py-2 font-mono font-bold tabular-nums">
                     ₹{String(b.net_amount)}
                   </td>
-                  <td className="px-3 py-2">
+                  <td className="px-3.5 py-2">
                     <Badge variant={b.status === "PAID" ? "success" : "warning"}>
                       {String(b.status)}
                     </Badge>
@@ -255,12 +255,12 @@ export function ChatPanel({ onDataChanged }: { onDataChanged?: () => void }) {
 
     if (users && users.length > 0) {
       return (
-        <div className="mt-3 divide-y divide-neutral-300 border border-[#0A0A0A] bg-white">
+        <div className="mt-3 divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
           {users.map((u) => (
-            <div key={u.id} className="flex items-center justify-between px-3 py-2 text-xs">
+            <div key={u.id} className="flex items-center justify-between px-4 py-2.5 text-xs">
               <div>
-                <span className="font-bold text-[#0A0A0A]">{String(u.full_name)}</span>{" "}
-                <span className="font-mono text-[11px] text-neutral-500">({String(u.email)})</span>
+                <span className="font-bold text-slate-900">{String(u.full_name)}</span>{" "}
+                <span className="font-mono text-[11px] text-slate-500">({String(u.email)})</span>
               </div>
               <div className="flex gap-1">
                 {(u.roles as string[]).map((r) => (
@@ -279,26 +279,28 @@ export function ChatPanel({ onDataChanged }: { onDataChanged?: () => void }) {
   };
 
   return (
-    <div className="flex h-[650px] flex-col border border-[#0A0A0A] bg-white">
-      <div className="flex items-center justify-between border-b border-[#0A0A0A] bg-[#0A0A0A] px-5 py-3 text-white">
+    <div className="flex h-[660px] flex-col overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-sm">
+      <div className="flex items-center justify-between border-b border-slate-100 bg-slate-950 px-6 py-4 text-white">
         <div className="flex items-center gap-2.5">
-          <Terminal className="h-4 w-4 text-[#E10600]" />
-          <h2 className="text-xs font-extrabold uppercase tracking-[0.12em]">
-            Conversational Operations Console
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-600">
+            <Sparkles className="h-3.5 w-3.5 text-white" />
+          </div>
+          <h2 className="text-sm font-bold tracking-tight">
+            Conversational Operations Copilot
           </h2>
         </div>
-        <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-neutral-400">
-          Structured Intent // RBAC Enforced
+        <span className="rounded-full bg-white/10 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-slate-300">
+          Structured Intent · RBAC Enforced
         </span>
       </div>
 
-      <div className="flex flex-wrap gap-1.5 border-b border-[#0A0A0A] bg-[#F4F3EF] px-4 py-2.5">
+      <div className="flex flex-wrap gap-1.5 border-b border-slate-100 bg-slate-50/80 px-5 py-3">
         {SUGGESTED_PROMPTS.map((prompt) => (
           <button
             key={prompt}
             type="button"
             onClick={() => sendMessage(prompt)}
-            className="border border-neutral-400 bg-white px-2.5 py-1 text-[11px] font-medium text-[#0A0A0A] transition hover:border-[#0A0A0A] hover:bg-[#0A0A0A] hover:text-white"
+            className="rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-medium text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700"
           >
             {prompt}
           </button>
@@ -312,21 +314,21 @@ export function ChatPanel({ onDataChanged }: { onDataChanged?: () => void }) {
             className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
           >
             {msg.role === "assistant" && (
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center border border-[#0A0A0A] bg-[#F4F3EF] text-[#0A0A0A]">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
                 <Bot className="h-4 w-4" />
               </div>
             )}
             <div
-              className={`max-w-[85%] px-4 py-3 text-sm ${
+              className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm ${
                 msg.role === "user"
-                  ? "border border-[#0A0A0A] bg-[#0A0A0A] text-white"
+                  ? "bg-slate-950 text-white"
                   : msg.response?.status === "denied"
-                  ? "border border-[#E10600] border-l-4 bg-[#FFF2F2] text-[#0A0A0A]"
+                  ? "border border-rose-200 bg-rose-50/80 text-slate-900"
                   : msg.response?.status === "clarification_required"
-                  ? "border border-amber-700 border-l-4 bg-amber-50 text-[#0A0A0A]"
+                  ? "border border-amber-200 bg-amber-50/80 text-slate-900"
                   : msg.response?.status === "unsupported" || msg.response?.status === "invalid"
-                  ? "border border-neutral-500 border-l-4 bg-[#F4F3EF] text-[#0A0A0A]"
-                  : "border border-[#0A0A0A] border-l-4 bg-[#F4F3EF]/60 text-[#0A0A0A]"
+                  ? "border border-slate-200 bg-slate-100 text-slate-900"
+                  : "border border-slate-200/80 bg-slate-50/80 text-slate-900"
               }`}
             >
               {msg.response && (
@@ -368,15 +370,15 @@ export function ChatPanel({ onDataChanged }: { onDataChanged?: () => void }) {
               )}
             </div>
             {msg.role === "user" && (
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center border border-[#0A0A0A] bg-[#0A0A0A] text-white">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-white">
                 <UserIcon className="h-4 w-4" />
               </div>
             )}
           </div>
         ))}
         {loading && (
-          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.08em] text-neutral-600">
-            <span className="h-2.5 w-2.5 animate-pulse bg-[#E10600]" />
+          <div className="flex items-center gap-2 font-mono text-[11px] text-slate-500">
+            <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-indigo-600" />
             <span>Extracting structured intent and enforcing RBAC policy...</span>
           </div>
         )}
@@ -387,7 +389,7 @@ export function ChatPanel({ onDataChanged }: { onDataChanged?: () => void }) {
           e.preventDefault();
           sendMessage();
         }}
-        className="flex items-center gap-2 border-t border-[#0A0A0A] bg-[#F4F3EF] p-3.5"
+        className="flex items-center gap-2 border-t border-slate-100 bg-slate-50/80 p-4"
       >
         <Input
           value={input}

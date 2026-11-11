@@ -13,9 +13,11 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F4F3EF] font-mono text-xs uppercase tracking-[0.14em] text-[#0A0A0A]">
-        <span className="mr-2.5 inline-block h-2.5 w-2.5 animate-pulse bg-[#E10600]" />
-        Verifying session...
+      <div className="flex min-h-screen items-center justify-center bg-[#F3F5F8]">
+        <div className="flex items-center gap-2.5 rounded-2xl border border-slate-200 bg-white px-5 py-3 font-mono text-xs text-slate-700 shadow-sm">
+          <span className="inline-block h-2.5 w-2.5 animate-pulse rounded-full bg-indigo-600" />
+          Verifying session...
+        </div>
       </div>
     );
   }

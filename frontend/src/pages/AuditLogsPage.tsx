@@ -26,12 +26,12 @@ export function AuditLogsPage() {
   }, []);
 
   return (
-    <div className="space-y-5">
-      <div className="border-b-2 border-[#0A0A0A] pb-4">
-        <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[#E10600]">
+    <div className="space-y-4">
+      <div className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm">
+        <div className="inline-flex rounded-full bg-amber-50 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-amber-800">
           05 // Compliance &amp; Telemetry
         </div>
-        <h1 className="mt-1 text-2xl font-extrabold uppercase tracking-tight text-[#0A0A0A]">
+        <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">
           Immutable Audit Log ({total})
         </h1>
       </div>
@@ -42,38 +42,38 @@ export function AuditLogsPage() {
         </CardHeader>
         <CardContent className="p-0">
           {error ? (
-            <div className="p-6 text-sm font-medium text-[#E10600]">{error}</div>
+            <div className="p-6 text-sm font-medium text-rose-600">{error}</div>
           ) : loading ? (
-            <div className="p-6 font-mono text-xs uppercase text-neutral-500">
+            <div className="p-6 font-mono text-xs text-slate-500">
               Loading audit logs...
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="border-b border-[#0A0A0A] bg-[#F4F3EF] font-mono text-[10px] uppercase tracking-[0.1em] text-neutral-700">
+                <thead className="border-b border-slate-200 bg-slate-50 font-mono text-[10px] uppercase tracking-wider text-slate-500">
                   <tr>
-                    <th className="px-4 py-3">Timestamp</th>
-                    <th className="px-4 py-3">Query</th>
-                    <th className="px-4 py-3">Operation</th>
-                    <th className="px-4 py-3">Auth Result</th>
-                    <th className="px-4 py-3">Exec Status</th>
-                    <th className="px-4 py-3">Rows</th>
-                    <th className="px-4 py-3">Decision Reason</th>
+                    <th className="px-5 py-3">Timestamp</th>
+                    <th className="px-5 py-3">Query</th>
+                    <th className="px-5 py-3">Operation</th>
+                    <th className="px-5 py-3">Auth Result</th>
+                    <th className="px-5 py-3">Exec Status</th>
+                    <th className="px-5 py-3">Rows</th>
+                    <th className="px-5 py-3">Decision Reason</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-200">
+                <tbody className="divide-y divide-slate-100">
                   {logs.map((log) => (
-                    <tr key={log.id} className="hover:bg-[#F4F3EF]/60">
-                      <td className="whitespace-nowrap px-4 py-2.5 font-mono text-[11px] tabular-nums text-neutral-500">
+                    <tr key={log.id} className="hover:bg-slate-50/70">
+                      <td className="whitespace-nowrap px-5 py-3 font-mono text-[11px] tabular-nums text-slate-500">
                         {new Date(log.created_at).toLocaleString()}
                       </td>
-                      <td className="max-w-[220px] truncate px-4 py-2.5 font-semibold text-[#0A0A0A]">
+                      <td className="max-w-[220px] truncate px-5 py-3 font-semibold text-slate-900">
                         {log.raw_user_query}
                       </td>
-                      <td className="px-4 py-2.5 font-mono text-[11px]">
+                      <td className="px-5 py-3 font-mono text-[11px]">
                         {log.operation || "—"}
                       </td>
-                      <td className="px-4 py-2.5">
+                      <td className="px-5 py-3">
                         <Badge
                           variant={
                             log.authorization_result === "ALLOWED"
@@ -86,13 +86,13 @@ export function AuditLogsPage() {
                           {log.authorization_result}
                         </Badge>
                       </td>
-                      <td className="px-4 py-2.5">
+                      <td className="px-5 py-3">
                         <Badge variant="outline">{log.execution_status}</Badge>
                       </td>
-                      <td className="px-4 py-2.5 font-mono tabular-nums">
+                      <td className="px-5 py-3 font-mono tabular-nums">
                         {log.affected_rows ?? "—"}
                       </td>
-                      <td className="max-w-[280px] px-4 py-2.5 text-neutral-700">
+                      <td className="max-w-[280px] px-5 py-3 text-slate-600">
                         {log.decision_reason}
                       </td>
                     </tr>

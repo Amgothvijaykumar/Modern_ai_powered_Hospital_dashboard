@@ -56,26 +56,26 @@ export function OperationPreviewCard({ preview, onResolved }: OperationPreviewCa
 
   if (status === "confirmed" && confirmResult) {
     return (
-      <div className="mt-3 border border-emerald-700 border-l-4 bg-emerald-50 p-4 text-sm">
-        <div className="flex flex-wrap items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.06em] text-emerald-900">
-          <CheckCircle2 className="h-4 w-4" />
-          <span>Executed // {confirmResult.operation}</span>
+      <div className="mt-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm">
+        <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-emerald-900">
+          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+          <span>Executed · {confirmResult.operation}</span>
           <Badge variant="success">{confirmResult.affected_rows} rows</Badge>
         </div>
         <p className="mt-1.5 text-xs text-emerald-950">{confirmResult.message}</p>
         {confirmResult.financial_impact && (
-          <div className="mt-3 grid grid-cols-3 gap-px border border-emerald-700 bg-emerald-700 text-xs">
-            <div className="bg-white p-2 font-mono">
-              <div className="text-[10px] uppercase text-neutral-500">Net Before</div>
+          <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
+            <div className="rounded-xl bg-white p-2.5 font-mono ring-1 ring-emerald-200">
+              <div className="text-[10px] uppercase text-slate-500">Net Before</div>
               <div className="font-bold tabular-nums">₹{confirmResult.financial_impact.total_net_before}</div>
             </div>
-            <div className="bg-white p-2 font-mono">
-              <div className="text-[10px] uppercase text-neutral-500">Net After</div>
+            <div className="rounded-xl bg-white p-2.5 font-mono ring-1 ring-emerald-200">
+              <div className="text-[10px] uppercase text-slate-500">Net After</div>
               <div className="font-bold tabular-nums">₹{confirmResult.financial_impact.total_net_after}</div>
             </div>
-            <div className="bg-white p-2 font-mono">
-              <div className="text-[10px] uppercase text-neutral-500">Total Discount</div>
-              <div className="font-bold tabular-nums text-emerald-800">
+            <div className="rounded-xl bg-white p-2.5 font-mono ring-1 ring-emerald-200">
+              <div className="text-[10px] uppercase text-slate-500">Total Discount</div>
+              <div className="font-bold tabular-nums text-emerald-700">
                 ₹{confirmResult.financial_impact.total_discount_amount}
               </div>
             </div>
@@ -87,19 +87,19 @@ export function OperationPreviewCard({ preview, onResolved }: OperationPreviewCa
 
   if (status === "cancelled") {
     return (
-      <div className="mt-3 flex items-center gap-2 border border-neutral-400 bg-[#F4F3EF] p-3 font-mono text-xs text-neutral-700">
-        <XCircle className="h-4 w-4 text-neutral-600" />
+      <div className="mt-3 flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-100 p-3 text-xs text-slate-600">
+        <XCircle className="h-4 w-4 text-slate-500" />
         <span>Preview cancelled for {preview.operation}. Zero database changes applied.</span>
       </div>
     );
   }
 
   return (
-    <div className="mt-3 border border-[#0A0A0A] border-l-4 border-l-amber-600 bg-white p-4 text-sm">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 pb-2.5">
+    <div className="mt-3 rounded-2xl border border-amber-200 bg-white p-4 text-sm shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="h-4 w-4 text-[#0A0A0A]" />
-          <span className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-[#0A0A0A]">
+          <ShieldCheck className="h-4 w-4 text-amber-600" />
+          <span className="text-xs font-bold text-slate-900">
             Dry-Run Preview Specification
           </span>
           <Badge variant="warning">{preview.operation}</Badge>
@@ -107,47 +107,47 @@ export function OperationPreviewCard({ preview, onResolved }: OperationPreviewCa
         <Badge variant="info">Rows: {preview.affected_rows}</Badge>
       </div>
 
-      <p className="mt-2.5 text-xs leading-relaxed text-[#0A0A0A]">{preview.summary}</p>
+      <p className="mt-3 text-xs leading-relaxed text-slate-700">{preview.summary}</p>
 
       {preview.resolved_date_range && (
-        <div className="mt-2.5 flex items-center gap-2 border border-[#0A0A0A] bg-[#F4F3EF] px-3 py-2 font-mono text-[11px] text-[#0A0A0A]">
-          <Calendar className="h-3.5 w-3.5 shrink-0 text-[#E10600]" />
+        <div className="mt-3 flex items-center gap-2 rounded-xl bg-slate-50 px-3 py-2 font-mono text-[11px] text-slate-700 ring-1 ring-slate-200">
+          <Calendar className="h-3.5 w-3.5 shrink-0 text-indigo-600" />
           <span>
-            RESOLVED PERIOD ({preview.resolved_date_range.timezone}):{" "}
-            <strong>{preview.resolved_date_range.start_date}</strong> TO{" "}
+            Period ({preview.resolved_date_range.timezone}):{" "}
+            <strong>{preview.resolved_date_range.start_date}</strong> to{" "}
             <strong>{preview.resolved_date_range.end_date}</strong>
           </span>
         </div>
       )}
 
       {preview.financial_impact && (
-        <div className="mt-2.5 border border-[#0A0A0A]">
-          <div className="flex items-center gap-1.5 border-b border-[#0A0A0A] bg-[#F4F3EF] px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-[#0A0A0A]">
-            <IndianRupee className="h-3 w-3 text-[#E10600]" />
+        <div className="mt-3 rounded-2xl border border-slate-200 bg-slate-50/70 p-3">
+          <div className="mb-2 flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-600">
+            <IndianRupee className="h-3 w-3 text-indigo-600" />
             Financial Impact ({preview.financial_impact.currency || "INR"})
           </div>
-          <div className="grid grid-cols-2 gap-px bg-neutral-300 text-xs sm:grid-cols-4">
-            <div className="bg-white p-2.5">
-              <div className="font-mono text-[10px] uppercase text-neutral-500">Gross Total</div>
+          <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+            <div className="rounded-xl bg-white p-2.5 ring-1 ring-slate-200/80">
+              <div className="font-mono text-[10px] uppercase text-slate-400">Gross Total</div>
               <div className="mt-0.5 font-mono font-bold tabular-nums">
                 ₹{preview.financial_impact.total_gross_amount}
               </div>
             </div>
-            <div className="bg-white p-2.5">
-              <div className="font-mono text-[10px] uppercase text-neutral-500">Net Before</div>
+            <div className="rounded-xl bg-white p-2.5 ring-1 ring-slate-200/80">
+              <div className="font-mono text-[10px] uppercase text-slate-400">Net Before</div>
               <div className="mt-0.5 font-mono font-bold tabular-nums">
                 ₹{preview.financial_impact.total_net_before}
               </div>
             </div>
-            <div className="bg-white p-2.5">
-              <div className="font-mono text-[10px] uppercase text-neutral-500">Net After</div>
-              <div className="mt-0.5 font-mono font-bold tabular-nums text-[#0A0A0A]">
+            <div className="rounded-xl bg-white p-2.5 ring-1 ring-slate-200/80">
+              <div className="font-mono text-[10px] uppercase text-slate-400">Net After</div>
+              <div className="mt-0.5 font-mono font-bold tabular-nums text-slate-900">
                 ₹{preview.financial_impact.total_net_after}
               </div>
             </div>
-            <div className="bg-white p-2.5">
-              <div className="font-mono text-[10px] uppercase text-neutral-500">Total Discount</div>
-              <div className="mt-0.5 font-mono font-bold tabular-nums text-[#E10600]">
+            <div className="rounded-xl bg-white p-2.5 ring-1 ring-slate-200/80">
+              <div className="font-mono text-[10px] uppercase text-slate-400">Total Discount</div>
+              <div className="mt-0.5 font-mono font-bold tabular-nums text-rose-600">
                 ₹{preview.financial_impact.total_discount_amount}
               </div>
             </div>
@@ -157,27 +157,27 @@ export function OperationPreviewCard({ preview, onResolved }: OperationPreviewCa
 
       {preview.samples.length > 0 && (
         <div className="mt-3">
-          <div className="mb-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-neutral-600">
+          <div className="mb-1.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-slate-500">
             Sample Diff ({preview.samples.length} of {preview.affected_rows})
           </div>
-          <div className="divide-y divide-neutral-300 border border-neutral-300">
+          <div className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200">
             {preview.samples.map((sample) => (
               <div
                 key={sample.id}
                 className="grid grid-cols-1 gap-2 bg-white p-2.5 text-xs md:grid-cols-3"
               >
-                <div className="font-semibold text-[#0A0A0A]">
+                <div className="font-semibold text-slate-900">
                   {sample.item_name || sample.patient_name || sample.full_name || sample.id}
                   {sample.batch_number && (
-                    <div className="font-mono text-[10px] text-neutral-500">{sample.batch_number}</div>
+                    <div className="font-mono text-[10px] text-slate-400">{sample.batch_number}</div>
                   )}
                 </div>
-                <div className="font-mono text-[11px] text-neutral-600">
-                  <span className="font-bold uppercase text-neutral-500">Before: </span>
+                <div className="font-mono text-[11px] text-slate-500">
+                  <span className="font-bold uppercase text-slate-400">Before: </span>
                   <code className="break-all">{JSON.stringify(sample.before)}</code>
                 </div>
-                <div className="font-mono text-[11px] text-[#0A0A0A]">
-                  <span className="font-bold uppercase text-[#E10600]">After: </span>
+                <div className="font-mono text-[11px] text-slate-900">
+                  <span className="font-bold uppercase text-indigo-600">After: </span>
                   <code className="break-all">{JSON.stringify(sample.after)}</code>
                 </div>
               </div>
@@ -187,15 +187,15 @@ export function OperationPreviewCard({ preview, onResolved }: OperationPreviewCa
       )}
 
       {preview.business_rules_note && (
-        <p className="mt-2.5 font-mono text-[11px] text-neutral-600">{preview.business_rules_note}</p>
+        <p className="mt-2.5 font-mono text-[11px] text-slate-500">{preview.business_rules_note}</p>
       )}
 
       {preview.requires_exact_row_count && (
-        <div className="mt-3 border border-[#E10600] border-l-4 bg-[#FFF2F2] p-3">
-          <div className="flex items-start gap-2 text-xs text-[#0A0A0A]">
-            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#E10600]" />
+        <div className="mt-3 rounded-2xl border border-rose-200 bg-rose-50 p-3">
+          <div className="flex items-start gap-2 text-xs text-slate-900">
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-rose-600" />
             <div>
-              <strong className="uppercase text-[#E10600]">High-Impact Write (&gt; 50 rows):</strong>{" "}
+              <strong className="text-rose-700">High-Impact Write (&gt; 50 rows):</strong>{" "}
               Enter exact row count (<strong className="font-mono">{preview.affected_rows}</strong>)
               to unlock execution.
             </div>
@@ -211,12 +211,12 @@ export function OperationPreviewCard({ preview, onResolved }: OperationPreviewCa
       )}
 
       {error && (
-        <div className="mt-2.5 border border-[#E10600] bg-[#FFF2F2] px-3 py-2 text-xs font-medium text-[#E10600]">
+        <div className="mt-2.5 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-medium text-rose-700">
           {error}
         </div>
       )}
 
-      <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-neutral-200 pt-3">
+      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
         <Button onClick={handleConfirm} disabled={submitting || !exactMatches} size="sm">
           {submitting ? "Executing..." : "Confirm & Execute"}
         </Button>

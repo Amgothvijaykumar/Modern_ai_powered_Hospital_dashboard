@@ -4,7 +4,10 @@ import { cn } from "@/lib/utils";
 export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("rounded-none border border-[#0A0A0A] bg-white", className)}
+      className={cn(
+        "rounded-3xl border border-slate-200/90 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.04)]",
+        className
+      )}
       {...props}
     />
   );
@@ -13,7 +16,7 @@ export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
 export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("border-b border-[#0A0A0A] bg-[#F4F3EF]/60 px-5 py-3.5", className)}
+      className={cn("border-b border-slate-100 px-6 py-4", className)}
       {...props}
     />
   );
@@ -23,7 +26,7 @@ export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHead
   return (
     <h3
       className={cn(
-        "text-xs font-bold uppercase tracking-[0.1em] text-[#0A0A0A]",
+        "text-sm font-bold tracking-tight text-slate-900",
         className
       )}
       {...props}
@@ -32,5 +35,5 @@ export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHead
 }
 
 export function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("p-5", className)} {...props} />;
+  return <div className={cn("p-6", className)} {...props} />;
 }

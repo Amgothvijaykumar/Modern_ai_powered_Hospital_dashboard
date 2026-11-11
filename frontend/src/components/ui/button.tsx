@@ -13,22 +13,27 @@ export function Button({
   ...props
 }: ButtonProps) {
   const variants = {
-    default: "bg-[#0A0A0A] text-white hover:bg-[#E10600] border border-[#0A0A0A] hover:border-[#E10600]",
-    secondary: "bg-[#F4F3EF] text-[#0A0A0A] border border-neutral-400 hover:border-[#0A0A0A] hover:bg-white",
-    outline: "border border-[#0A0A0A] bg-white text-[#0A0A0A] hover:bg-[#0A0A0A] hover:text-white",
-    destructive: "bg-[#E10600] text-white border border-[#E10600] hover:bg-red-800",
-    ghost: "text-[#0A0A0A] hover:bg-neutral-200/70 border border-transparent",
+    default:
+      "bg-slate-950 text-white hover:bg-indigo-600 shadow-sm",
+    secondary:
+      "bg-slate-100 text-slate-900 hover:bg-slate-200 border border-slate-200",
+    outline:
+      "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-300",
+    destructive:
+      "bg-rose-600 text-white hover:bg-rose-700 shadow-sm",
+    ghost:
+      "text-slate-700 hover:bg-slate-100",
   };
   const sizes = {
-    sm: "h-8 px-3 text-[11px] uppercase tracking-[0.08em]",
-    md: "h-9 px-4 text-xs uppercase tracking-[0.08em]",
-    lg: "h-11 px-6 text-xs uppercase tracking-[0.1em]",
+    sm: "h-8 rounded-xl px-3 text-xs",
+    md: "h-10 rounded-xl px-4 text-sm",
+    lg: "h-11 rounded-2xl px-6 text-sm",
   };
 
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-none font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10600] focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-40",
+        "inline-flex items-center justify-center gap-2 font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-45",
         variants[variant],
         sizes[size],
         className

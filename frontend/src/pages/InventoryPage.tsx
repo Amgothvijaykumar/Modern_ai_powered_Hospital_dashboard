@@ -38,29 +38,28 @@ export function InventoryPage() {
   }, [load]);
 
   return (
-    <div className="space-y-5">
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b-2 border-[#0A0A0A] pb-4">
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm">
         <div>
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[#E10600]">
+          <div className="inline-flex rounded-full bg-indigo-50 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-indigo-700">
             02 // Inventory Catalog
           </div>
-          <h1 className="mt-1 text-2xl font-extrabold uppercase tracking-tight text-[#0A0A0A]">
+          <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">
             Hospital Inventory ({total})
           </h1>
         </div>
 
-        <div className="flex flex-wrap border border-[#0A0A0A] bg-white">
+        <div className="flex flex-wrap gap-1.5 rounded-2xl border border-slate-200 bg-slate-50 p-1.5">
           {[
             { key: "all", label: "All" },
             { key: "low_stock", label: "Low Stock" },
             { key: "expiring_soon", label: "Expiring (30d)" },
             { key: "out_of_stock", label: "Out of Stock" },
-          ].map((f, idx) => (
+          ].map((f) => (
             <Button
               key={f.key}
               variant={filter === f.key ? "default" : "ghost"}
               size="sm"
-              className={idx > 0 ? "border-l border-neutral-300" : ""}
               onClick={() => setFilter(f.key)}
             >
               {f.label}
@@ -73,9 +72,9 @@ export function InventoryPage() {
         <CardHeader className="flex flex-row items-center justify-between gap-4">
           <CardTitle>Inventory Records Ledger</CardTitle>
           <div className="relative w-64">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-neutral-400" />
+            <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
             <Input
-              className="pl-8"
+              className="pl-9"
               placeholder="Search item name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -84,43 +83,43 @@ export function InventoryPage() {
         </CardHeader>
         <CardContent className="p-0">
           {error ? (
-            <div className="p-6 text-sm font-medium text-[#E10600]">{error}</div>
+            <div className="p-6 text-sm font-medium text-rose-600">{error}</div>
           ) : loading ? (
-            <div className="p-6 font-mono text-xs uppercase text-neutral-500">
+            <div className="p-6 font-mono text-xs text-slate-500">
               Loading inventory...
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="border-b border-[#0A0A0A] bg-[#F4F3EF] font-mono text-[10px] uppercase tracking-[0.1em] text-neutral-700">
+                <thead className="border-b border-slate-200 bg-slate-50 font-mono text-[10px] uppercase tracking-wider text-slate-500">
                   <tr>
-                    <th className="px-4 py-3">Item Name</th>
-                    <th className="px-4 py-3">Category</th>
-                    <th className="px-4 py-3">Quantity</th>
-                    <th className="px-4 py-3">Min Qty</th>
-                    <th className="px-4 py-3">Unit Price</th>
-                    <th className="px-4 py-3">Expiry</th>
-                    <th className="px-4 py-3">Batch</th>
+                    <th className="px-5 py-3">Item Name</th>
+                    <th className="px-5 py-3">Category</th>
+                    <th className="px-5 py-3">Quantity</th>
+                    <th className="px-5 py-3">Min Qty</th>
+                    <th className="px-5 py-3">Unit Price</th>
+                    <th className="px-5 py-3">Expiry</th>
+                    <th className="px-5 py-3">Batch</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-200">
+                <tbody className="divide-y divide-slate-100">
                   {items.map((item) => (
-                    <tr key={item.id} className="hover:bg-[#F4F3EF]/60">
-                      <td className="px-4 py-2.5 font-semibold text-[#0A0A0A]">{item.item_name}</td>
-                      <td className="px-4 py-2.5 text-neutral-600">{item.category}</td>
-                      <td className="px-4 py-2.5 font-mono tabular-nums">
+                    <tr key={item.id} className="hover:bg-slate-50/70">
+                      <td className="px-5 py-3 font-semibold text-slate-900">{item.item_name}</td>
+                      <td className="px-5 py-3 text-slate-600">{item.category}</td>
+                      <td className="px-5 py-3 font-mono tabular-nums">
                         <Badge variant={item.is_low_stock ? "danger" : "success"}>
                           {item.quantity}
                         </Badge>
                       </td>
-                      <td className="px-4 py-2.5 font-mono tabular-nums text-neutral-600">
+                      <td className="px-5 py-3 font-mono tabular-nums text-slate-600">
                         {item.minimum_quantity}
                       </td>
-                      <td className="px-4 py-2.5 font-mono tabular-nums">₹{item.unit_price}</td>
-                      <td className="px-4 py-2.5 font-mono text-[11px] tabular-nums text-neutral-600">
+                      <td className="px-5 py-3 font-mono tabular-nums">₹{item.unit_price}</td>
+                      <td className="px-5 py-3 font-mono text-[11px] tabular-nums text-slate-600">
                         {item.expiry_date}
                       </td>
-                      <td className="px-4 py-2.5 font-mono text-[11px] text-neutral-500">
+                      <td className="px-5 py-3 font-mono text-[11px] text-slate-500">
                         {item.batch_number}
                       </td>
                     </tr>
