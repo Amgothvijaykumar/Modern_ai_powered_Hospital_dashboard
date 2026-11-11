@@ -281,15 +281,17 @@ def test_scenario_08_admin_cannot_remove_own_admin_access(client, db_session: Se
     admin = login_as(client, "admin.a@metrogeneral.org")
     roles_before = db_session.scalar(select(func.count(UserRole.id)))
 
-    resp = client.post(
-        "/api/agent/chat",
-        headers={"Authorization": admin["Authorization"]},
-        json={"message": "Remove my Admin role."},
-    )
-    assert resp.status_code == 200
-    body = resp.json()
-    assert body["status"] == "denied"
-    assert "own admin" in body["message"].lower()
+    for query in ("Remove my Admin role.", "delete my role as admin"):
+        resp = client.post(
+            "/api/agent/chat",
+            headers={"Authorization": admin["Authorization"]},
+            json={"message": query},
+        )
+        assert resp.status_code == 200
+        body = resp.json()
+        assert body["status"] == "denied"
+        assert body["operation"] == "users.manage_access"
+        assert "own admin" in body["message"].lower()
 
     db_session.expire_all()
     assert db_session.scalar(select(func.count(UserRole.id))) == roles_before

@@ -187,6 +187,15 @@
       "requires_clarification": false,
       "clarification_question": null
     }
+  },
+  {
+    "user_query": "Delete my role as admin",
+    "expected": {
+      "intent": "users.manage_access",
+      "parameters": {"action": "revoke_role", "target_user_name": "self", "role_name": "Admin"},
+      "requires_clarification": false,
+      "clarification_question": null
+    }
   }
 ]
 

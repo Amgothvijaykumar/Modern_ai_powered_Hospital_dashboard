@@ -225,17 +225,17 @@ export function DashboardPage() {
                   key={perm.permission_key}
                   className="flex items-center justify-between gap-2 rounded-2xl px-4 py-3 text-xs transition hover:bg-slate-50"
                 >
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <div className="font-mono text-xs font-semibold text-slate-900">
                       {perm.permission_key}
                     </div>
                     {Object.keys(perm.constraints).length > 0 && (
-                      <div className="mt-0.5 font-mono text-[10px] text-slate-500">
+                      <div className="mt-0.5 break-all font-mono text-[10px] text-slate-500">
                         {JSON.stringify(perm.constraints)}
                       </div>
                     )}
                   </div>
-                  <Badge variant={perm.allowed ? "success" : "outline"}>
+                  <Badge className="shrink-0" variant={perm.allowed ? "success" : "outline"}>
                     {perm.allowed ? "Allow" : "Deny"}
                   </Badge>
                 </div>

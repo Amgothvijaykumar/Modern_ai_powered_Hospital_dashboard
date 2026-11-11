@@ -298,7 +298,7 @@ class IntentExtractorService:
             if any(
                 kw in ql
                 for kw in ("list users", "show users", "show all users", "view users", "list staff", "show staff", "who has", "list employees")
-            ) and not any(w in ql for w in ("grant", "give", "remove", "revoke", "deny", "make me")):
+            ) and not any(w in ql for w in ("grant", "give", "remove", "revoke", "deny", "delete", "drop", "demote", "make me")):
                 role_filter = None
                 for alias, canonical in ROLE_ALIASES.items():
                     if alias in ql:
@@ -316,9 +316,24 @@ class IntentExtractorService:
             # Check self-demotion / self-promotion / user access changes
             is_self = any(
                 phrase in ql
-                for phrase in ("my own", "my admin", "myself", "make me ", "promote me", "remove my ")
+                for phrase in (
+                    "my own",
+                    "my admin",
+                    "my role",
+                    "myself",
+                    "make me ",
+                    "promote me",
+                    "demote me",
+                    "remove my ",
+                    "delete my ",
+                    "revoke my ",
+                    "drop my ",
+                )
             )
-            is_remove = any(w in ql for w in ("remove", "revoke", "deny", "strip", "take away", "disable"))
+            is_remove = any(
+                w in ql
+                for w in ("remove", "revoke", "deny", "strip", "take away", "disable", "delete", "drop", "demote")
+            )
             is_grant = any(w in ql for w in ("give", "grant", "allow", "add", "promote", "make "))
 
             matched_perm = None
