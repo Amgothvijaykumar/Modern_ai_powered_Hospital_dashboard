@@ -229,6 +229,7 @@ Try these prompts in the **Conversational Operations Copilot** after signing in:
 
 - **Deployment Blueprint:** [render.yaml](render.yaml) (FastAPI backend on Render), [backend/Dockerfile](backend/Dockerfile), and [frontend/vercel.json](frontend/vercel.json) (React SPA on Vercel).
 - **Architecture & Docs:**
+  - [Prompt Engineering & Build Log](promptsgiven.md)
   - [System Architecture & Assumptions](docs/architecture.md)
   - [Security & Tenant Isolation](docs/security.md)
   - [One-Page Design Note (Risks & Mitigations)](docs/design_note.md)
